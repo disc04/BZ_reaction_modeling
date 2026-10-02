@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bz-models"
+version = "0.1.0"
+description = "Oregonator models of the Belousov-Zhabotinsky reaction: oscillations, bifurcations and spatial waves"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Anastasia" }]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+    "pillow>=9.0",
+]
+
+[tool.setuptools]
+packages = ["bz_models"]

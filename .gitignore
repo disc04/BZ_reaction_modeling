@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+build/
+dist/
+venv/
+.idea/
+.ipynb_checkpoints/
+.DS_Store
+
+# Reference material (third-party PDFs/slides, not redistributed)
+BZ_docs/

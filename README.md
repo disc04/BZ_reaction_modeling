@@ -267,6 +267,43 @@ over the whole cycle. Extended mechanisms that keep bromomalonic acid as a
 separate variable (e.g. Györgyi & Field, 1992) would be needed. Effects specific
 to droplets, such as bromine partitioning into the oil phase, may also contribute.
 
+### Test 3: time series of one droplet
+
+![Time-series test](figures/validation_timeseries.png)
+
+The droplet (base recipe) oscillates for 70 min in three phases: **initial**
+(small, fast, ~5 s period), **main** (large, period lengthening from 12.7 to
+about 17 s) and **late** (period suddenly shortening to about 12 s while the
+amplitude collapses) before the medium is exhausted. Because the classic
+Oregonator holds the reactants constant and cannot age, bromate and malonic
+acid are made dynamic here (`bz_models/depletion.py`). Two parameters are
+calibrated: k_c0 on the period at 10–20 min, and a depletion scale on the
+70-min lifetime.
+- **Main phase: reproduced.** The slow lengthening of the period from 10 to
+  58 min follows the data closely, a genuine prediction since only the start
+  point and the end time were fitted.
+- **Initial phase: missed.** The model oscillates at full size from the first
+  second. The induction chemistry (bromination of malonic acid, which first
+  raises and then lowers bromide) is not in the model.
+- **Late phase: wrong route out.** The model ends when malonic acid runs out,
+  with the period diverging and the amplitude growing. The droplet ends the
+  opposite way: shorter period and collapsing amplitude, the signature of
+  approaching a supercritical Hopf bifurcation (the small-cycle regime seen in
+  Part 1).
+- **Amplitude and waveform: limited by catalyst conservation.** Model ferriin
+  peaks grow far beyond the 2 mM of ferroin present, and its oxidation spikes
+  (about 1 s) are much narrower than the droplet's (fast rise, roughly 8–10 s
+  decay; the 2.5 s video frames blur only part of this).
+
+### Part 2 summary
+
+The Oregonator captures the core oscillator, the acid dependence (once k_c
+scales with acid and bromate) and the slow ageing of the main phase. It fails
+where its lumped chemistry matters: the malonic acid trend, the induction and
+exhaustion phases, and absolute amplitudes. The two most direct improvements
+would be a catalyst-conserving variant and a model that tracks bromomalonic
+acid explicitly (e.g. Györgyi & Field, 1992).
+
 ## Usage
 
 Install the package in editable mode (ideally inside a virtual environment).
@@ -287,6 +324,7 @@ python scripts/reduced_oregonator.py  # nullclines and Hopf bifurcations
 python scripts/spatial_patterns.py    # target and spiral waves (~2–3 min)
 python scripts/validate_acid_bromate.py  # Part 2, test 1 (needs Chang_BZ_data/, ~1 min)
 python scripts/validate_malonic_acid.py  # Part 2, test 2 (~5 min)
+python scripts/validate_timeseries.py    # Part 2, test 3 (~3 min)
 ```
 
 ```python
@@ -310,6 +348,7 @@ bz_models/            model code (installable package)
   recipe.py           rate constants from a BZ recipe ([H+], bromate, malonic acid)
   data.py             loader for the Chang et al. droplet dataset
   validation.py       shared calibration of k_c on the base recipe
+  depletion.py        Oregonator with slow consumption of bromate and malonic acid
   plotting.py         plotting utilities
 scripts/
   run_oregonator.py   simulate and plot time series
@@ -319,6 +358,7 @@ scripts/
   spatial_patterns.py    target and spiral waves, GIF animations
   validate_acid_bromate.py  Part 2, test 1: frequency vs acid and bromate
   validate_malonic_acid.py  Part 2, test 2: malonic acid and the role of f
+  validate_timeseries.py    Part 2, test 3: one droplet over its lifetime
 figures/              generated plots
 ```
 
@@ -334,7 +374,7 @@ figures/              generated plots
 **Part 2: validation on droplet data** ([doi:10.5258/SOTON/D0363](https://doi.org/10.5258/SOTON/D0363))
 - [x] Acid and bromate test: predicted vs measured frequency as [H₂SO₄] and [NaBrO₃] vary
 - [x] Malonic acid test: frequency vs [malonic acid], and the role of f
-- [ ] Time-series test: waveform and slowing of oscillations as reactants deplete
+- [x] Time-series test: waveform and slowing of oscillations as reactants deplete
 
 ## References
 

@@ -50,6 +50,30 @@ Conventions follow Field & Noyes (1974): step O3 is the net of
 BrO₃⁻ + HBrO₂ → 2BrO₂• and 2BrO₂• + 2Ce³⁺ → 2HBrO₂ + 2Ce⁴⁺, so bromate is the
 reactant and two Ce⁴⁺ are formed per event.
 
+### Why the Oregonator?
+
+| Model | Variables | Derived from BZ chemistry? | Stable limit cycle? | Main drawback |
+|---|---|---|---|---|
+| Lotka–Volterra | 2 | No | No (conservative centres) | Each perturbation gives a new orbit; not realistic chemistry |
+| Brusselator | 2 | No (abstract; built for the Bray–Liebhafsky reaction) | Yes | Trimolecular step that is chemically improbable |
+| Berlinator | 3 | Partly | No (stable nodes and a saddle) | Does not oscillate on its own |
+| Full FKN mechanism | ~10 species | Yes | Yes | Many uncertain rate constants, very stiff, hard to analyse |
+| Extended Oregonator (Showalter) | 4+ | Yes | Yes | More parameters for little qualitative gain |
+| **Oregonator** | **3 (2 after reduction)** | **Yes (reduction of FKN)** | **Yes** | **Lumped parameters f and k_c** |
+
+The Oregonator is the smallest model derived directly from the real BZ
+mechanism. Its rate constants are measured, and its variables map onto actual
+species (HBrO₂, Br⁻, Ce⁴⁺). It is also the only model above that covers this
+project's whole scope in one framework: sustained oscillations with a
+realistic period, reduction to two variables for nullcline and bifurcation
+analysis, and excitability, which gives target and spiral waves. It has long
+been the standard reference model for BZ dynamics, so results can be checked
+against the literature.
+
+**Limitations:** f and k_c are lumped, semi-empirical parameters; the total
+amount of catalyst is not conserved; and the model does not reproduce the
+aperiodic (chaotic) behaviour seen in some BZ experiments.
+
 ### Oscillation period
 
 With the default Field–Noyes parameters (f = 1) the period is ≈ 390 s. The
@@ -170,6 +194,31 @@ Numerics: a 400 × 400 grid, an isotropic 9-point Laplacian with no-flux
 boundaries, and explicit Euler stepping in pure NumPy. Colours mimic the
 ferroin indicator (red = reduced, blue = oxidised).
 
+## Part 2 (planned): validation on experimental droplet data
+
+**The study.** Chang, de Planque & Zauner (2018) recorded ferroin-catalysed BZ
+oscillations in droplets in oil by video and quantified the colour waves. The
+open dataset ([doi:10.5258/SOTON/D0363](https://doi.org/10.5258/SOTON/D0363),
+CC-BY) contains:
+- concentration series in which one component is varied at a time (H₂SO₄,
+  NaBrO₃, malonic acid, ferroin), with oscillation frequency, lifetime, wave
+  count and amplitude for 4–7 repeat droplets each;
+- the full time series of one droplet over its oscillatory lifetime
+  (289 curated peaks).
+
+**What the data means for our model.** Acid and bromate enter the Oregonator
+directly through the rate constants (k₁, k₂, k₃ ∝ [H⁺]; A = [BrO₃⁻]), so their
+effect on frequency is a direct prediction. Malonic acid enters through B and,
+indirectly, through the bromide yield f. Measured frequency falls with
+malonic acid, the opposite of the simple prediction period ≈ 8/(k_c·B), which
+makes it a discriminating test. Ferroin has no explicit counterpart in the
+model, because the Oregonator does not conserve catalyst, so it is out of scope.
+
+**Rationale.** Part 1 shows that the model is internally consistent; Part 2
+asks whether it is right. Because f and k_c are lumped parameters, the aim is to
+reproduce **trends and orders of magnitude**, not exact waveforms, and to show
+clearly where the model's simplifications break down.
+
 ## Usage
 
 Install the package in editable mode (ideally inside a virtual environment).
@@ -220,11 +269,17 @@ figures/              generated plots
 
 ## Roadmap
 
+**Part 1: model and dynamics**
 - [x] Three-variable Oregonator: sustained oscillations
 - [x] Effect of the stoichiometric factor f
 - [x] Phase portrait / limit cycle
 - [x] Two-variable reduced Oregonator: nullclines, Hopf bifurcation in f
 - [x] Reaction–diffusion: target and spiral waves in 2D
+
+**Part 2: validation on droplet data** ([doi:10.5258/SOTON/D0363](https://doi.org/10.5258/SOTON/D0363))
+- [ ] Acid and bromate test: predicted vs measured frequency as [H₂SO₄] and [NaBrO₃] vary
+- [ ] Malonic acid test: frequency vs [malonic acid], and the role of f
+- [ ] Time-series test: waveform and slowing of oscillations as reactants deplete
 
 ## References
 
@@ -240,3 +295,6 @@ figures/              generated plots
    Oregonator model. *Int. J. Bifurcation Chaos* 1, 445–466.
 7. Vîlcu, R. & Bala, D. (2004). Models of oscillating chemical reactions.
    *Analele Universității din București – Chimie* XIII, 277–286.
+8. Chang, K. M., de Planque, M. R. R. & Zauner, K.-P. (2018). Towards functional
+   droplet architectures: a Belousov–Zhabotinsky medium for networks.
+   *Sci. Rep.* 8, 12656. Data: [doi:10.5258/SOTON/D0363](https://doi.org/10.5258/SOTON/D0363).

@@ -6,8 +6,12 @@ build/
 dist/
 venv/
 .idea/
+.qodo/
 .ipynb_checkpoints/
 .DS_Store
 
 # Reference material (third-party PDFs/slides, not redistributed)
 BZ_docs/
+
+# Experimental data (424 MB; download from https://doi.org/10.5258/SOTON/D0363)
+Chang_BZ_data/

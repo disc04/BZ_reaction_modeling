@@ -145,3 +145,20 @@ def steady_state(p: OregonatorParams | None = None) -> np.ndarray:
 
     x = brentq(g, 1e-15, p.k3 * p.A / (2.0 * p.k4), xtol=1e-20, rtol=1e-12)
     return np.array([x, y_of(x), 2.0 * p.k3 * p.A * x / (p.kc * p.B)])
+
+
+def oscillation_frequency(p: OregonatorParams, t_end: float = 600.0,
+                          max_t_end: float = 6000.0) -> float:
+    """Oscillation frequency (Hz) on the attractor; 0.0 if the system is at steady state.
+
+    The run is lengthened (up to max_t_end) until enough peaks are found,
+    so slow oscillations are not mistaken for a steady state.
+    """
+    while True:
+        t, c = simulate(p, t_end=t_end, n_points=int(t_end * 50) + 1)
+        period = estimate_period(t, c[0], discard=0.5)
+        if np.isfinite(period):
+            return 1.0 / period
+        if t_end >= max_t_end:
+            return 0.0
+        t_end = min(4 * t_end, max_t_end)

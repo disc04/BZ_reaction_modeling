@@ -194,7 +194,7 @@ Numerics: a 400 × 400 grid, an isotropic 9-point Laplacian with no-flux
 boundaries, and explicit Euler stepping in pure NumPy. Colours mimic the
 ferroin indicator (red = reduced, blue = oxidised).
 
-## Part 2 (planned): validation on experimental droplet data
+## Part 2: validation on experimental droplet data
 
 **The study.** Chang, de Planque & Zauner (2018) recorded ferroin-catalysed BZ
 oscillations in droplets in oil by video and quantified the colour waves. The
@@ -219,6 +219,54 @@ asks whether it is right. Because f and k_c are lumped parameters, the aim is to
 reproduce **trends and orders of magnitude**, not exact waveforms, and to show
 clearly where the model's simplifications break down.
 
+### Test 1: acid and bromate
+
+![Acid and bromate test](figures/validation_acid_bromate.png)
+
+The rate constants carry their acid orders (k₁ ∝ h², k₂ ∝ h, k₃ ∝ h; [H⁺] from
+H₂SO₄ including HSO₄⁻ dissociation). The only free parameter, k_c, was
+calibrated once on the base recipe (0.5 M H₂SO₄, 0.47 M NaBrO₃, 0.18 M malonic
+acid; 0.106 Hz → k_c ≈ 34 M⁻¹ s⁻¹). Everything else is a prediction.
+- **Model A (k_c constant) fails.** Below about 0.33 M acid or bromate it
+  predicts no oscillations at all, and above that the frequency hardly
+  changes, whereas the droplets oscillate across the whole range and speed up
+  about 20×.
+- **Model B (k_c ∝ [H⁺][BrO₃⁻]) captures the acid series** (log-log slope 1.47
+  vs 1.66 measured) **but underestimates the bromate effect** (slope 1.00 vs
+  1.73).
+
+The catalyst-reduction rate must therefore rise with acid and bromate, which
+is consistent with its dependence on bromomalonic acid, whose formation is
+acid- and bromate-driven. The steeper-than-linear bromate dependence is
+something the lumped Oregonator does not capture. Caveat: the data are median
+frequencies over a droplet's lifetime as reactants deplete, while the model
+uses the initial recipe.
+
+### Test 2: malonic acid
+
+![Malonic acid test](figures/validation_malonic_acid.png)
+
+In the Oregonator, malonic acid (B) enters **only through the catalyst-reset
+rate k_c·B** (step O5), so the whole question is how that product changes.
+- **(a) Predictions.** With k_c constant, more malonic acid speeds the
+  oscillations up, and above 0.28 M they stop altogether. With k_c·B constant,
+  malonic acid has no effect. The droplets do neither: their frequency falls
+  2.5× between 0.18 and 0.54 M.
+- **(b) What the data would require.** Matching each measured frequency
+  needs k_c·B to *drop* about 14× (log-log slope −2.3) as malonic acid triples,
+  the opposite of what a reset rate driven by the organic substrate should do.
+- **(c) The role of f.** The frequency map shows contours that run almost
+  parallel to the f axis: f mainly decides *whether* the system oscillates,
+  not how fast. No value of f rescues model A above 0.28 M, so the bromide
+  yield cannot explain the slowing either.
+
+**Conclusion:** the malonic acid trend lies outside what the Oregonator can
+represent. The likely missing chemistry is malonic acid's role as a bromine
+scavenger and source of bromomalonic acid, which controls bromide production
+over the whole cycle. Extended mechanisms that keep bromomalonic acid as a
+separate variable (e.g. Györgyi & Field, 1992) would be needed. Effects specific
+to droplets, such as bromine partitioning into the oil phase, may also contribute.
+
 ## Usage
 
 Install the package in editable mode (ideally inside a virtual environment).
@@ -237,6 +285,8 @@ python scripts/explore_f.py        # scan over f
 python scripts/phase_portrait.py   # limit cycle in phase space
 python scripts/reduced_oregonator.py  # nullclines and Hopf bifurcations
 python scripts/spatial_patterns.py    # target and spiral waves (~2–3 min)
+python scripts/validate_acid_bromate.py  # Part 2, test 1 (needs Chang_BZ_data/, ~1 min)
+python scripts/validate_malonic_acid.py  # Part 2, test 2 (~5 min)
 ```
 
 ```python
@@ -257,6 +307,9 @@ bz_models/            model code (installable package)
   oregonator.py       rate equations, solver, steady state, Jacobian, period
   reduced.py          two-variable Oregonator, nullclines, Hopf points
   spatial.py          2D reaction-diffusion: targets and spirals
+  recipe.py           rate constants from a BZ recipe ([H+], bromate, malonic acid)
+  data.py             loader for the Chang et al. droplet dataset
+  validation.py       shared calibration of k_c on the base recipe
   plotting.py         plotting utilities
 scripts/
   run_oregonator.py   simulate and plot time series
@@ -264,6 +317,8 @@ scripts/
   phase_portrait.py   limit cycle in (x, y, z) space
   reduced_oregonator.py  nullclines and bifurcation diagram
   spatial_patterns.py    target and spiral waves, GIF animations
+  validate_acid_bromate.py  Part 2, test 1: frequency vs acid and bromate
+  validate_malonic_acid.py  Part 2, test 2: malonic acid and the role of f
 figures/              generated plots
 ```
 
@@ -277,8 +332,8 @@ figures/              generated plots
 - [x] Reaction–diffusion: target and spiral waves in 2D
 
 **Part 2: validation on droplet data** ([doi:10.5258/SOTON/D0363](https://doi.org/10.5258/SOTON/D0363))
-- [ ] Acid and bromate test: predicted vs measured frequency as [H₂SO₄] and [NaBrO₃] vary
-- [ ] Malonic acid test: frequency vs [malonic acid], and the role of f
+- [x] Acid and bromate test: predicted vs measured frequency as [H₂SO₄] and [NaBrO₃] vary
+- [x] Malonic acid test: frequency vs [malonic acid], and the role of f
 - [ ] Time-series test: waveform and slowing of oscillations as reactants deplete
 
 ## References
@@ -298,3 +353,5 @@ figures/              generated plots
 8. Chang, K. M., de Planque, M. R. R. & Zauner, K.-P. (2018). Towards functional
    droplet architectures: a Belousov–Zhabotinsky medium for networks.
    *Sci. Rep.* 8, 12656. Data: [doi:10.5258/SOTON/D0363](https://doi.org/10.5258/SOTON/D0363).
+9. Györgyi, L. & Field, R. J. (1992). A three-variable model of deterministic
+   chaos in the Belousov–Zhabotinsky reaction. *Nature* 355, 808–810.

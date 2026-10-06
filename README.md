@@ -153,11 +153,11 @@ identical, and the period is 372 s vs 387 s.
 The x-nullcline is **N-shaped**; the z-nullcline is the line z = x. Their
 intersection is the steady state, and f moves it along the N:
 - **f = 0.4:** the intersection sits on the right (outer) branch, a stable
-  oxidised state.
+  oxidised state (blue for ferroin).
 - **f = 1:** it sits on the middle branch, which repels. The trajectory creeps
   along the slow outer branches and jumps quickly between them. This is the
   geometric picture of a relaxation oscillator.
-- **f = 2.6:** the intersection sits on the left branch, a stable reduced state.
+- **f = 2.6:** the intersection sits on the left branch, a stable reduced state (red for ferroin).
 
 ![Bifurcation diagram](figures/reduced_bifurcation.png)
 

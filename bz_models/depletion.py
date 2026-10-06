@@ -10,7 +10,7 @@ k_c follows [BrO3-] (k_c = k_c0 * A / A0), the hypothesis that best fitted
 the acid series in Test 1.
 
 s (< 1) is a depletion scale factor. It is needed because the Oregonator does
-not conserve catalyst: its ferriin/Ce4+ excursions (~10 mM) exceed the 2 mM of
+not conserve catalyst: its oxidised-catalyst (ferriin) excursions (~10 mM) exceed the 2 mM of
 ferroin actually present, so the raw consumption steps run far too fast.
 s is calibrated against the observed oscillation lifetime.
 """
@@ -61,7 +61,7 @@ def simulate_depleting(
 
 
 def oscillation_peaks(t: np.ndarray, u: np.ndarray):
-    """Peak times (s) and Ce4+ peak heights (M) of each oscillation."""
+    """Peak times (s) and Ce4+ peak heights (M) of the oxidised catalyst for each oscillation."""
     pk, _ = find_peaks(np.log10(np.clip(u[0], 1e-30, None)), prominence=1.0)
     # catalyst peak: maximum of z within each cycle (z lags the HBrO2 spike)
     bounds = list(pk) + [len(t) - 1]

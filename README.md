@@ -30,7 +30,15 @@ steps and three intermediates:
 | O5 | B + Z → ½f·Y | k_c·B·Z |
 
 A = BrO₃⁻, B = malonic acid, **X = HBrO₂** (activator), **Y = Br⁻** (inhibitor),
-**Z = Ce⁴⁺** (oxidised catalyst). A and B are held constant.
+**Z = M<sub>ox</sub>**, the oxidised catalyst (Ce⁴⁺ or ferriin). A and B are held constant.
+
+**Catalyst notation.** The Oregonator was formulated for the cerium-catalysed
+system studied by Field, Kőrös & Noyes (1972), so Z is often written Ce⁴⁺. The
+rate constants k₁–k₄ describe bromine–oxybromine chemistry and do not involve
+the catalyst, so they apply equally to ferroin. Only k_c and f (reduction of the
+catalyst by the organic substrate, and the bromide it releases) are
+catalyst-specific. This project therefore writes Z as M<sub>ox</sub> (Ce⁴⁺ or ferriin),
+with M<sub>red</sub> for the reduced form (Ce³⁺ or ferroin).
 
 Rate equations (mass-action kinetics):
 
@@ -47,8 +55,8 @@ again. The delay introduced by Z is essential: eliminating it removes the
 oscillations.
 
 Conventions follow Field & Noyes (1974): step O3 is the net of
-BrO₃⁻ + HBrO₂ → 2BrO₂• and 2BrO₂• + 2Ce³⁺ → 2HBrO₂ + 2Ce⁴⁺, so bromate is the
-reactant and two Ce⁴⁺ are formed per event.
+BrO₃⁻ + HBrO₂ → 2BrO₂• and 2BrO₂• + 2M<sub>red</sub> → 2HBrO₂ + 2M<sub>ox</sub>, so bromate is the
+reactant and two M<sub>ox</sub> are formed per event.
 
 ### Why the Oregonator?
 
@@ -63,7 +71,7 @@ reactant and two Ce⁴⁺ are formed per event.
 
 The Oregonator is the smallest model derived directly from the real BZ
 mechanism. Its rate constants are measured, and its variables map onto actual
-species (HBrO₂, Br⁻, Ce⁴⁺). It is also the only model above that covers this
+species (HBrO₂, Br⁻, oxidised catalyst). It is also the only model above that covers this
 project's whole scope in one framework: sustained oscillations with a
 realistic period, reduction to two variables for nullcline and bifurcation
 analysis, and excitability, which gives target and spiral waves. It has long
@@ -78,7 +86,7 @@ aperiodic (chaotic) behaviour seen in some BZ experiments.
 
 With the default Field–Noyes parameters (f = 1) the period is ≈ 390 s. The
 period is set mainly by the slow catalyst-reduction step O5: after each spike,
-Ce⁴⁺ must decay with rate constant k_c·B before Br⁻ falls low enough to let
+the oxidised catalyst must decay with rate constant k_c·B before Br⁻ falls low enough to let
 autocatalysis restart, giving period ≈ 8 / (k_c·B). k_c is a lumped, empirical
 constant, so the absolute period is a tunable quantity; experimental periods
 (tens of seconds to minutes) depend on [BrO₃⁻], [malonic acid], [H⁺] and the
@@ -86,17 +94,17 @@ catalyst.
 
 ### The stoichiometric factor f
 
-f is the number of Br⁻ ions returned per two Ce⁴⁺ reduced in O5. It lumps the
+f is the number of Br⁻ ions returned per two M<sub>ox</sub> reduced in O5. It lumps the
 complex organic chemistry of Process C into one number and sets the **strength
 of the negative feedback**:
 
 - **f < ≈ 0.5**: too little Br⁻ is regenerated to switch autocatalysis off. The
-  system sits in an **oxidised steady state** (high HBrO₂ and Ce⁴⁺, low Br⁻).
+  system sits in an **oxidised steady state** (high HBrO₂ and M<sub>ox</sub>, low Br⁻).
 - **≈ 0.5 < f < ≈ 2.4**: oscillations. The theoretical limit is
   0.5 < f < 1 + √2 as k_c → 0. The period is shortest near f ≈ 1 and grows
   toward both edges.
 - **f > ≈ 2.4**: Br⁻ is regenerated so strongly that autocatalysis never
-  restarts. The system sits in a **reduced steady state** (low HBrO₂ and Ce⁴⁺, Br⁻ held above the switching threshold).
+  restarts. The system sits in a **reduced steady state** (low HBrO₂ and M<sub>ox</sub>, Br⁻ held above the switching threshold).
 
 Both edges are Hopf bifurcations.
 
@@ -119,8 +127,8 @@ The steady state at the centre is **unstable**. Its Jacobian eigenvalues at
 f = 1 are λ ≈ −14.2, +1.69 and +5.1·10⁻⁴ s⁻¹; the two positive values push
 trajectories away from it and onto the cycle.
 
-The Br⁻ vs Ce⁴⁺ projection maps the cycle onto the FKN processes. Br⁻ drops
-below its threshold (A), autocatalysis oxidises the catalyst (B), and Ce⁴⁺
+The Br⁻ vs M<sub>ox</sub> projection maps the cycle onto the FKN processes. Br⁻ drops
+below its threshold (A), autocatalysis oxidises the catalyst (B), and catalyst
 reduction releases Br⁻, followed by a slow joint decay that resets the clock (C).
 The very fast jumps and the slow drift are the signature of a **relaxation
 oscillator**.
@@ -136,7 +144,7 @@ y = f·z/(q + x). This leaves two variables (Tyson & Fife, 1980):
   dz/dτ = x − z
 ```
 
-with x = scaled [HBrO₂], z = scaled [Ce⁴⁺], τ = k_c·B·t, ε = k_c·B/(k₃·A) and
+with x = scaled [HBrO₂], z = scaled [M<sub>ox</sub>], τ = k_c·B·t, ε = k_c·B/(k₃·A) and
 q = 2k₁k₄/(k₂k₃). The reduction reproduces the full model: the steady state is
 identical, and the period is 372 s vs 387 s.
 
@@ -180,7 +188,7 @@ Parameters (ε = 0.05, q = 0.002, f = 2.5, Dₓ = 1, D_z = 0.6) put the medium i
 the **excitable** regime: f is just above the upper Hopf point, so the rest
 state is stable, but a supra-threshold kick triggers a full excursion.
 - **Trigger waves:** autocatalysis at the front plus diffusion of HBrO₂ ignite
-  the neighbouring medium. The refractory tail (high Ce⁴⁺ and Br⁻) behind the
+  the neighbouring medium. The refractory tail (high M<sub>ox</sub> and Br⁻) behind the
   front prevents backward propagation, so colliding waves annihilate.
 - **Targets:** small discs with oscillatory kinetics (f = 1) act as pacemakers,
   like dust or bubbles in the dish, and emit concentric rings.

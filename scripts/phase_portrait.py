@@ -59,7 +59,7 @@ def main() -> None:
     ax3.legend(loc="upper left", frameon=False, fontsize=9)
     ax3.set_title("Phase space (log concentrations)", loc="left", fontsize=11, color=TEXT)
 
-    # --- 2D projection: Br- vs Ce4+ -------------------------------------------
+    # --- 2D projection: Br- vs oxidised catalyst -----------------------------
     ax2 = fig.add_subplot(1, 2, 2)
     plot_phase_2d(cyc, ax=ax2, xvar="z", yvar="y", lw=2.2)
     ax2.plot(ss[2], ss[1], "o", ms=7, mfc="white", mec=TEXT, mew=1.5)
@@ -69,7 +69,7 @@ def main() -> None:
     # Label the FKN processes on the cycle; segments are located from the data.
     y, z = cyc[1], cyc[2]
     gy = np.sqrt(y.min() * y.max())  # geometric middle of the Br- range
-    gz = np.sqrt(z.min() * z.max())  # geometric middle of the Ce4+ range
+    gz = np.sqrt(z.min() * z.max())  # geometric middle of the M_ox range
     low_z, low_y, high_z = z < 3 * z.min(), y < 3 * y.min(), z > 0.5 * z.max()
     upper = y > gy
 
@@ -84,9 +84,9 @@ def main() -> None:
 
     labels = [
         (closest(low_z, target_y=1e-7), "A: Br⁻ consumed\nbelow threshold", (10, 0), "left"),
-        (closest(low_y, target_z=gz), "B: autocatalysis,\nCe³⁺ → Ce⁴⁺", (0, 14), "center"),
-        (closest(high_z, target_y=gy), "C: Ce⁴⁺ reduction\nreleases Br⁻", (-10, 0), "right"),
-        (closest(upper, target_z=gz), "C: slow decay of\nCe⁴⁺ and Br⁻", (8, -16), "left"),
+        (closest(low_y, target_z=gz), "B: autocatalysis,\nM$_\\mathrm{red}$ → M$_\\mathrm{ox}$", (0, 22), "center"),
+        (closest(high_z, target_y=gy), "C: catalyst reduction\nreleases Br⁻", (-10, 0), "right"),
+        (closest(upper, target_z=gz), "C: slow decay of\nM$_\\mathrm{ox}$ and Br⁻", (8, -16), "left"),
     ]
     for i, text, off, ha in labels:
         ax2.plot(z[i], y[i], "o", ms=5, color=CYCLE)
@@ -99,7 +99,7 @@ def main() -> None:
         ax2.annotate("", xy=(z[k + 40], y[k + 40]), xytext=(z[k], y[k]),
                      arrowprops=dict(arrowstyle="-|>", color=CYCLE, lw=1.5,
                                      mutation_scale=16, shrinkA=0, shrinkB=0))
-    ax2.set_title(f"Projection: Br⁻ vs Ce⁴⁺ (one cycle, period ≈ {period:.0f} s)",
+    ax2.set_title(f"Projection: Br⁻ vs M$_\\mathrm{{ox}}$ (one cycle, period ≈ {period:.0f} s)",
                   loc="left", fontsize=11, color=TEXT)
 
     fig.tight_layout()

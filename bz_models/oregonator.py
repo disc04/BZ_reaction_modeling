@@ -11,9 +11,14 @@ Mechanism (A = BrO3-, B = organic substrate, e.g. malonic acid):
 Dynamic variables (molar concentrations):
     x = [HBrO2]   activator
     y = [Br-]     inhibitor
-    z = [Ce(IV)]  oxidised catalyst (or ferriin with ferroin)
+    z = [M_ox]    oxidised catalyst: Ce(IV), or ferriin with ferroin
 
 A and B are treated as constant (pool chemical approximation).
+
+Catalyst notation: Z is the generic oxidised catalyst M_ox (Ce4+ in the
+original cerium system of Field, Koros & Noyes; ferriin with ferroin).
+k1-k4 describe bromine-oxybromine chemistry and do not involve the catalyst;
+only k_c and f (catalyst reduction, bromide release) are catalyst-specific.
 
 Conventions follow Field & Noyes (1974). O3 is the net of
     BrO3- + HBrO2 + H+       -> 2 BrO2* + H2O
@@ -49,7 +54,7 @@ class OregonatorParams:
     kc: float = 1.0       # M^-1 s^-1
     A: float = 0.06       # [BrO3-], M
     B: float = 0.02       # [organic substrate], M
-    f: float = 1.0        # Br- produced per 2 Ce4+ reduced; oscillates for ~0.5 < f < 2.4
+    f: float = 1.0        # Br- produced per 2 M_ox reduced; oscillates for ~0.5 < f < 2.4
 
 
 def oregonator_rhs(t: float, c: np.ndarray, p: OregonatorParams) -> list[float]:

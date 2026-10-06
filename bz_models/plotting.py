@@ -9,7 +9,7 @@ import numpy as np
 SPECIES = (
     ("x", r"HBrO$_2$ (X)", "#eb6834"),
     ("y", r"Br$^-$ (Y)", "#2a78d6"),
-    ("z", r"Ce$^{4+}$ (Z)", "#1baf7a"),
+    ("z", r"M$_\mathrm{ox}$ (Z: Ce$^{4+}$ / ferriin)", "#1baf7a"),
 )
 
 TEXT = "#3d3d3a"
@@ -76,7 +76,7 @@ TRANSIENT = "#a3a29a"
 AXIS_LABELS = {
     "x": r"log$_{10}$ [HBrO$_2$]",
     "y": r"log$_{10}$ [Br$^-$]",
-    "z": r"log$_{10}$ [Ce$^{4+}$]",
+    "z": r"log$_{10}$ [M$_\mathrm{ox}$]",
 }
 
 
@@ -119,7 +119,7 @@ def plot_phase_2d(
     alpha: float = 1.0,
     label: str | None = None,
 ) -> plt.Axes:
-    """2D projection of a trajectory on log-log axes (e.g. Br- vs Ce4+)."""
+    """2D projection of a trajectory on log-log axes (e.g. Br- vs oxidised catalyst)."""
     if ax is None:
         _, ax = plt.subplots(figsize=(5, 5))
     idx = {"x": 0, "y": 1, "z": 2}
@@ -168,7 +168,7 @@ def plot_phase_plane(
     ax.set_xlim(*x_range)
     ax.set_ylim(*z_range)
     ax.set_xlabel(r"x  (scaled [HBrO$_2$])")
-    ax.set_ylabel(r"z  (scaled [Ce$^{4+}$])")
+    ax.set_ylabel(r"z  (scaled [M$_\mathrm{ox}$])")
     style_axes(ax)
     return ax
 

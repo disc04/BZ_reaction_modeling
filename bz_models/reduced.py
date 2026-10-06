@@ -5,7 +5,7 @@ scaled (Tyson, 1985):
 
     x = [HBrO2] / X0,   X0 = k3*A / (2*k4)
     y = [Br-]   / Y0,   Y0 = k3*A / k2
-    z = [Ce4+]  / Z0,   Z0 = (k3*A)^2 / (k4*kc*B)
+    z = [M_ox]  / Z0,   Z0 = (k3*A)^2 / (k4*kc*B)
     tau = kc*B * t
 
 giving the dimensionless three-variable model
